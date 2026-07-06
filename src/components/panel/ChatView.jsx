@@ -9,6 +9,45 @@ const SUGERENCIAS = [
   '¿Qué diferencia hay entre pastelería y panadería?',
 ]
 
+function renderBold(line, keyPrefix) {
+  const parts = line.split(/\*\*(.+?)\*\*/g)
+  return parts.map((part, i) =>
+    i % 2 === 1 ? <strong key={`${keyPrefix}-${i}`}>{part}</strong> : part
+  )
+}
+
+function FormattedText({ text }) {
+  const lines = text.split('\n')
+  const blocks = []
+  let currentList = null
+
+  lines.forEach((line, i) => {
+    const trimmed = line.trim()
+    const isBullet = /^[*-]\s+/.test(trimmed)
+    if (isBullet) {
+      if (!currentList) { currentList = []; blocks.push({ type: 'ul', items: currentList }) }
+      currentList.push(trimmed.replace(/^[*-]\s+/, ''))
+    } else {
+      currentList = null
+      if (trimmed) blocks.push({ type: 'p', text: line })
+    }
+  })
+
+  return (
+    <>
+      {blocks.map((b, i) =>
+        b.type === 'ul' ? (
+          <ul key={i} className="ml-4 list-disc space-y-1">
+            {b.items.map((item, j) => <li key={j}>{renderBold(item, `${i}-${j}`)}</li>)}
+          </ul>
+        ) : (
+          <p key={i} className={i > 0 ? 'mt-2' : ''}>{renderBold(b.text, `${i}`)}</p>
+        )
+      )}
+    </>
+  )
+}
+
 export default function ChatView() {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
@@ -108,7 +147,7 @@ export default function ChatView() {
                 color: m.from === 'user' ? '#FAF8F5' : '#44403C',
               }}
             >
-              {m.text}
+              {m.from === 'user' ? m.text : <FormattedText text={m.text} />}
             </div>
           </div>
         ))}
