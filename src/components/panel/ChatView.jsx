@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 
 const WEBHOOK_URL = 'https://n8n.highcoachinggroup.com/webhook/gatto'
+const WEBHOOK_KEY = 'caf6b45e84d07c9282d2685a94e524c2'
 
 const SUGERENCIAS = [
   '¿Qué es la cocción al vacío?',
@@ -67,7 +68,7 @@ export default function ChatView() {
     try {
       const res = await fetch(WEBHOOK_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-Gatto-Key': WEBHOOK_KEY },
         body: JSON.stringify({ message: text }),
       })
       const text_ = await res.text()
