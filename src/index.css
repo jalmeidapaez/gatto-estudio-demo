@@ -50,6 +50,15 @@
 .animate-pop { animation: 0.5s cubic-bezier(0.22,1,0.36,1) forwards pop; }
 .animate-floaty { animation: floaty 6s ease-in-out infinite; }
 
+@keyframes shine-sweep {
+  0%   { transform: translateX(-120%) skewX(-20deg); opacity: 0; }
+  8%   { opacity: 0.6; }
+  32%  { opacity: 0.6; }
+  48%  { transform: translateX(220%) skewX(-20deg); opacity: 0; }
+  100% { transform: translateX(220%) skewX(-20deg); opacity: 0; }
+}
+.shine-sweep { animation: shine-sweep 3.4s ease-in-out infinite; }
+
 /* Scroll reveal (paired with useReveal hook) */
 .reveal { opacity: 0; }
 .reveal.is-visible { animation: reveal 0.7s cubic-bezier(0.22,1,0.36,1) forwards; }
